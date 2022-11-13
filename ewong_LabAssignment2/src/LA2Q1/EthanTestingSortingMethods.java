@@ -1,11 +1,9 @@
 package LA2Q1;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-
-import static java.util.Collections.disjoint;
-import static java.util.Collections.sort;
 
 public class EthanTestingSortingMethods {
     public static void main(String[] args) {
@@ -30,7 +28,7 @@ public class EthanTestingSortingMethods {
         System.out.println("Testing Execution time of different sorting methods for sorting 5 random numbers: ");
         System.out.println("The unsorted list: " + newList);
         long endTime; long startTime = System.nanoTime();
-        sort(newList);
+        Collections.sort(newList);
         endTime = System.nanoTime();
         double time = (endTime - startTime) * conversion;
         System.out.printf("Collections' Sorting Time: %.2f milliseconds \n", time);
@@ -100,7 +98,7 @@ public class EthanTestingSortingMethods {
 //        //Testing Collections Sort
 //        System.out.println("Testing Execution time of different sorting methods for sorting 50000 random numbers: ");
 //        long endTime; long startTime = System.nanoTime();
-//        sort(newList);
+//        Collections.sort(newList);
 //        endTime = System.nanoTime();
 //        double time = (endTime - startTime) * conversion;
 //        System.out.printf("Collections' Sorting Time: %.2f milliseconds \n", time);

@@ -42,14 +42,14 @@ public class EthanTestingSortingMethods {
         System.out.printf("My Selection-Sort Time: %.2f milliseconds \n", (double)(selectionSort(myArray)) * conversion); //call selection sort method and multiply its return by conversion of 10E-6
         System.out.println("The sorted list using selection-sort: " + newList);
 
-        //Testing bubble sort ***
+        //Testing bubble sort
         System.arraycopy(backup, 0, myArray, 0, sz); //recopy the original array with the backup
         newList = Arrays.asList(myArray);
         System.out.println("\nThe unsorted list: " + newList);
         System.out.printf("My Bubble-Sort: %.2f milliseconds \n", (double)(bubbleSort(myArray)) * conversion);
         System.out.println("The sorted list using Bubble-sort: " + newList);
 
-        //Testing insertion sort ***
+        //Testing insertion sort
         System.arraycopy(backup, 0, myArray, 0, sz); //recopy the original array with the backup
         newList = Arrays.asList(myArray);
         System.out.println("\nThe unsorted list: " + newList);
@@ -135,32 +135,36 @@ public class EthanTestingSortingMethods {
 //        footer(2,1);
     }
     public static <T extends Comparable<? super T>> long selectionSort(T [] a) {
-        long startTime = System.nanoTime();
-        T[] arr = a;
-        for(int i=0; i<arr.length-1; i++) {
+        long startTime = System.nanoTime(); //start timer
+        T[] arr = a; //save input array into arr
+        for(int i=0; i<arr.length-1; i++) { //tracks the boundary of the unsorted array.
+            //finding the minimum element in the unsorted array
             int min = i;
             for(int j=i+1; j<arr.length; j++) {
                 if(arr[j].compareTo(arr[min]) < 0) {
                     min = j;
                 }
             }
+            //swap the found minimum element with the first indexed element.
             T temp = arr[min];
             arr[min] = arr[i];
             arr[i] = temp;
         }
         a = arr;
-        long endTime = System.nanoTime();
-        return endTime - startTime;
+        long endTime = System.nanoTime(); //stop timer
+        return endTime - startTime; //return the difference in times
     }
     public static <T extends Comparable<? super T>> long bubbleSort(T[] a) {
         long startTime = System.nanoTime();
-        boolean nextPass = true;
-        T[] arr = a;
+        boolean nextPass = true; //checking if a next pass is required
+        T[] arr = a; //copy input array into arr
         int n = arr.length;
+        //looping through each element in the array
         for(int i = 0; i < n-1; i++) {
             nextPass = false;
+            //comparing each element to its neighbours and switching the element with them if it is greater
             for(int j = 0; j < n-i -1; j++) {
-                if(arr[j].compareTo(arr[j+1]) > 0) {
+                if(arr[j].compareTo(arr[j+1]) > 0) { //if the prev element is greater than the next element swap them
                     T temp = arr[j];
                     arr[j] = arr[j+1];
                     arr[j+1] = temp;
@@ -175,11 +179,13 @@ public class EthanTestingSortingMethods {
         long startTime = System.nanoTime();
         T[] arr = a;
         int n = a.length;
+        //looping through the entire unsorted list
         for(int i=1; i<n; i++) {
             T key = arr[i];
             int j = i-1;
+            //compare elements to the left of them and if greater then move it into the sorted position. Save sorted items.
             while(j >= 0 && arr[j].compareTo(key) > 0) {
-                arr[j+1] = arr[j];
+                arr[j+1] = arr[j]; //swapping places
                 j = j -1;
             }
             arr[j+1] = key;
@@ -190,16 +196,20 @@ public class EthanTestingSortingMethods {
     public static <T extends Comparable<? super T>> long mergeSort(T[] S) {
         long time; long startTime = System.nanoTime(); long endTime;
         int n = S.length;
+        //base case when elements are in arrays of size 1
         if(n < 2) {
             endTime = System.nanoTime();
             time = endTime - startTime;
             return time;
         }
         int mid = n/2;
+        //divide the array into 2 sections and copy their elements into two separate arrays
         T[] leftHalf = Arrays.copyOfRange(S, 0, mid);
         T[] rightHalf = Arrays.copyOfRange(S, mid, n);
+        //recursive call
         mergeSort(leftHalf);
         mergeSort(rightHalf);
+        //merge each split
         merge(S, leftHalf, rightHalf);
         endTime = System.nanoTime();
         time = endTime - startTime;
@@ -209,17 +219,21 @@ public class EthanTestingSortingMethods {
         int i = 0,j = 0,k = 0;
         int leftLength = leftHalf.length;
         int rightLength = rightHalf.length;
+        //continue while there are elements in each half of the array
         while(i < leftLength && j < rightLength) {
+            //if the left half element is greater than the right half add the left half to the 'k' position
             if(leftHalf[i].compareTo(rightHalf[j]) <= 0) {
                 inputArray[k] = leftHalf[i];
                 i++;
             }
+            //otherwise add the right half into the k position
             else {
                 inputArray[k] = rightHalf[j];
                 j++;
             }
             k++;
         }
+        //for the last elements during the merge add them to the end of the array
         while(i < leftLength) {
             inputArray[k] = leftHalf[i];
             i++; k++;
@@ -232,26 +246,33 @@ public class EthanTestingSortingMethods {
     public static <T extends Comparable<? super T>> long quickSort(T[] s, int a, int b) {
         long endTime; long startTime = System.nanoTime();
         int n = s.length;
+        //find a pivot index to chose from
         if(a < b) {
             int pivotIndex = partition(s, a, b);
+            //recursive call to sort each half on either side of the pivot
             quickSort(s, a, pivotIndex);
             quickSort(s, pivotIndex+1, b);
         }
         endTime = System.nanoTime();
-
         return endTime - startTime;
     }
     public static <T extends Comparable<? super T>> int partition(T[] s, int startIndex, int endIndex) {
+        //find the median of the array
         int pivotIndex = (startIndex + endIndex) / 2;
+        //set the pivot value to the element at the pivot index
         T pivotValue = s[pivotIndex];
         startIndex--;
         endIndex++;
         while(true) {
+            //starting at the first index of the sub-array we increment each index until we find a value greater than the pivot value
             do startIndex++; while(s[startIndex].compareTo(pivotValue) < 0);
+            //starting at the last index we decrement until we find a value less than the pivot value
             do endIndex--; while(s[endIndex].compareTo(pivotValue) > 0);
+            //breaking the loop when the front index and end index are equal or greater
             if(startIndex >= endIndex) {
                 return endIndex;
             }
+            //swap the values of each index
             T temp = s[startIndex];
             s[startIndex] = s[endIndex];
             s[endIndex] = temp;
@@ -259,18 +280,23 @@ public class EthanTestingSortingMethods {
     }
     public static long bucketSort(Integer[] a, int first, int last, int maxDigits) {
         long endTime; long startTime = System.nanoTime();
+        //create a vector with the size of 10 since we are in base-10 (decimal)
         Vector<Integer>[] bucket = new Vector[10];
+        //instantiate each bucket
         for(int i = 0; i < 10; i++) {
             bucket[i] = new Vector<>();
         }
         for(int i = 0; i < maxDigits; i++) {
+            //clearing the buckets
             for(int j = 0; j < 10; j++) {
                 bucket[j].removeAllElements();
             }
+            //placing the index element at the end of the index of bucket[digit]
             for(int index = first; index <= last; index ++) {
                 Integer digit = findDigit(a[index], i);
                 bucket[digit].add(a[index]);
             }
+            //adding all the buckets back into the array
             int index = 0;
             for(int m = 0; m < 10; m++) {
                 for(int n = 0; n < bucket[m].size(); n++) {
@@ -281,9 +307,10 @@ public class EthanTestingSortingMethods {
        endTime = System.nanoTime();
         return endTime - startTime;
     }
+    //finds the digit at the ith value
     public static Integer findDigit(int number, int i) {
         int target = 0;
-        for(int k = 0; k <= i; k++) {
+        for(int k = 0; k <= i; k++) { //finds the digit value at the 0th, 1st, 2nd, etc
             target = number % 10;
             number = number / 10;
         }
